@@ -114,6 +114,15 @@ python3 webui.py
 - **运行日志**：实时逐行追加每次模型调用、工具调用和验证结果
 - **任务面板**：任务结束后展示 DONE / FAILED / BLOCKED 状态与结论
 
+![Executor 运行截图](picture/executor.png)
+*Executor 执行过程*
+
+![Validator 验证截图](picture/validator.png)
+*Validator 独立验证*
+
+![最终结果截图](picture/result.png)
+*任务完成与结论*
+
 ## 架构
 
 ```

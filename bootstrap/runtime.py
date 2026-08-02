@@ -81,14 +81,12 @@ def create_client_from_env():
     return client, model_name, llm_timeout_seconds
 
 
-def create_tool_service() -> ToolService:
-    """构造运行时工具服务。
+def create_tool_service(exclude_tools: tuple[str, ...] = ()) -> ToolService:
+    """构造运行时工具服务，可按用户配置排除工具。"""
 
-    workspace 取 VeriForge2.0 根目录，这样所有工具对“相对路径”的理解都会一致。
-    """
     # `bootstrap/runtime.py` 的上上级目录正好就是 VeriForge2.0 根目录。
     workspace = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    return ToolService.bootstrap(workspace=workspace)
+    return ToolService.bootstrap(workspace=workspace, exclude_tools=exclude_tools)
 
 
 def create_skill_store(tool_service: ToolService) -> SkillStore:
