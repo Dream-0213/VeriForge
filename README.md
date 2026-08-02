@@ -258,4 +258,4 @@ python3 main_agent.py
 
 ## 致谢
 
-本项目在 [datawhalechina/self-harness](https://github.com/datawhalechina/self-harness) 的教学架构基础上迭代，结合私有化模型部署场景解决了 DeepSeek 后端的工具调用兼容问题，并针对长任务执行补充了并行动作解码与记忆截断优化。
+本项目在self-harness的教学架构基础上迭代，结合私有化模型部署场景解决了 DeepSeek 后端的工具调用兼容问题，并针对长任务执行补充了并行动作解码与记忆截断优化。
