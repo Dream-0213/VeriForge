@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""快速校验 miniMaster skill package 结构。"""
+"""快速校验 VeriForge skill package 结构。"""
 
 from __future__ import annotations
 
@@ -33,12 +33,12 @@ def validate_many(skill_dirs: list[Path]) -> int:
 
 def parse_args() -> argparse.Namespace:
     """解析命令行参数。"""
-    parser = argparse.ArgumentParser(description="Validate one or more miniMaster skill packages.")
+    parser = argparse.ArgumentParser(description="Validate one or more VeriForge skill packages.")
     parser.add_argument("skill_path", nargs="?", help="Path to a single skill directory.")
     parser.add_argument(
         "--all",
         action="store_true",
-        help="Validate all skill packages under miniMaster's bundled library.",
+        help="Validate all skill packages under VeriForge's bundled library.",
     )
     return parser.parse_args()
 

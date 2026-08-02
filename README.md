@@ -1,14 +1,14 @@
-# miniHarness
+# VeriForge
 
 **面向私有化大模型的多智能体 Harness** · 规划-执行-验证闭环 · 结构化动作协议 · 动态工作记忆
 
 ## 项目定位
 
-miniHarness 是我在 InfraCoder（单 Agent 工具链）基础上迭代的升级项目。它保留了对本地 vLLM 和云端 OpenAI-Compatible API 的兼容，但把 Agent 从"单层工具循环"升级为"多智能体编排系统"。
+VeriForge 是我在 InfraCoder（单 Agent 工具链）基础上迭代的升级项目。它保留了对本地 vLLM 和云端 OpenAI-Compatible API 的兼容，但把 Agent 从"单层工具循环"升级为"多智能体编排系统"。
 
 核心差异：
 
-| | InfraCoder | miniHarness |
+| | InfraCoder | VeriForge |
 |--|-----------|-------------|
 | 循环层级 | 单层 ReAct 循环 | 三层嵌套：Planner → Executor → Validator |
 | 任务管理 | 消息历史即状态 | ToDoList 任务看板 + 显式状态机 |
@@ -109,7 +109,7 @@ python3 main_agent.py
 ## 项目结构
 
 ```
-miniHarness/
+VeriForge/
 ├── main_agent.py          # 程序入口
 ├── bootstrap/             # 运行时装配（client / 工具 / 记忆 / 任务）
 ├── engine/                # 三层编排：main_loop / runner / validator

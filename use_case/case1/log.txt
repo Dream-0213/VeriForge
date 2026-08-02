@@ -1,4 +1,4 @@
-(miniMaster) ~/Desktop/miniMaster2.0 % python main_agent.py
+(VeriForge) ~/Desktop/VeriForge2.0 % python main_agent.py
 请输入你的任务/查询: 请你 根据当前目录的项目整理出一份项目报告
 
 ============================================================

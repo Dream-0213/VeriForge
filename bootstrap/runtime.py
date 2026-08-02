@@ -83,9 +83,9 @@ def create_client_from_env():
 def create_tool_service() -> ToolService:
     """构造运行时工具服务。
 
-    workspace 取 miniMaster2.0 根目录，这样所有工具对“相对路径”的理解都会一致。
+    workspace 取 VeriForge2.0 根目录，这样所有工具对“相对路径”的理解都会一致。
     """
-    # `bootstrap/runtime.py` 的上上级目录正好就是 miniMaster2.0 根目录。
+    # `bootstrap/runtime.py` 的上上级目录正好就是 VeriForge2.0 根目录。
     workspace = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     return ToolService.bootstrap(workspace=workspace)
 
@@ -100,7 +100,7 @@ def create_skill_store(tool_service: ToolService) -> SkillStore:
 def read_user_query() -> str:
     """读取并校验用户输入。
 
-    这里依然用最简单的终端输入，是因为 miniMaster 关注点在 harness，
+    这里依然用最简单的终端输入，是因为 VeriForge 关注点在 harness，
     而不是交互界面本身。
     """
     # 先读原始输入，再把首尾空白去掉。

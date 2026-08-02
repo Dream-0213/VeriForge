@@ -156,7 +156,7 @@ def validate_schema(params: Dict[str, Any], schema: Dict[str, Any]) -> str | Non
 
     这里没有引入完整 JSON Schema 库，而是只实现教学示例当前真正需要的
     几类校验：必填字段、字段类型、枚举值，以及可选的额外字段限制。
-    这样代码更容易读懂，也足够支撑 miniMaster 当前的动作协议。
+    这样代码更容易读懂，也足够支撑 VeriForge 当前的动作协议。
     """
     properties = schema.get("properties", {})
     required_fields = schema.get("required", [])

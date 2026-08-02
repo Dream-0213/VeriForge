@@ -49,7 +49,7 @@ def _parse_list_value(raw_value: str) -> list[str]:
 def parse_frontmatter(frontmatter_text: str) -> dict[str, object]:
     """解析 SKILL.md 顶部的极简 frontmatter。
 
-    这里没有依赖完整 YAML 库，而是只支持 miniMaster 当前真正需要的最小子集，
+    这里没有依赖完整 YAML 库，而是只支持 VeriForge 当前真正需要的最小子集，
     目的是让教学代码更短、更容易读懂。
     """
     metadata: dict[str, object] = {}
@@ -268,7 +268,7 @@ class SkillStore:
     def __init__(self, root: str):
         # skill library 根目录。
         self.root = Path(root).resolve()
-        # 这里通常会落回 miniMaster workspace 根，供渲染相对路径使用。
+        # 这里通常会落回 VeriForge workspace 根，供渲染相对路径使用。
         self.workspace_root = self.root.parents[1] if len(self.root.parents) >= 2 else self.root.parent
 
     def _iter_skill_dirs(self):

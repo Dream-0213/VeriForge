@@ -74,7 +74,7 @@ def _select_next_task(tasks: list[Task]) -> Task | None:
     - 如果有 RUNNING，优先续跑它；
     - 否则取第一个 PENDING。
 
-    这也提醒读者：miniMaster 的重点在 harness 结构，而不是复杂调度算法。
+    这也提醒读者：VeriForge 的重点在 harness 结构，而不是复杂调度算法。
     """
     running_tasks = [task for task in tasks if task.task_status == "RUNNING"]
     if running_tasks:

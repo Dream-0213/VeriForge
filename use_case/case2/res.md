@@ -1,10 +1,10 @@
-# miniMaster2.0 项目综合检查报告 — 面向初学者中文说明
+# VeriForge2.0 项目综合检查报告 — 面向初学者中文说明
 
 ---
 
 ## 一、项目目录结构概览
 
-miniMaster2.0 项目根目录包含以下关键文件和文件夹：
+VeriForge2.0 项目根目录包含以下关键文件和文件夹：
 
 | 名称 | 类型 | 作用简述 |
 |------|------|----------|
@@ -31,7 +31,7 @@ miniMaster2.0 项目根目录包含以下关键文件和文件夹：
 workspace = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ```
 
-这行代码的意思是：取当前文件（`bootstrap.py`）的绝对路径，再往上跳两级目录，得到的就是项目根目录。例如本项目 workspace 为 `C:\Users\25853\Desktop\self-harness\code\miniMaster2.0`。
+这行代码的意思是：取当前文件（`bootstrap.py`）的绝对路径，再往上跳两级目录，得到的就是项目根目录。例如本项目 workspace 为 `C:\Users\25853\Desktop\self-harness\code\VeriForge2.0`。
 
 ### 为什么要显式告诉 Agent workspace？
 
@@ -57,7 +57,7 @@ Agent 是一个在特定环境中执行任务的程序，而不是一个无所�
 
 1. **任务上下文锚定**：几乎所有文件操作都依赖于"我在哪里"。Agent 不知道当前目录，就像一个人不知道自己站在哪个房间，却要去找某个柜子里的文件——必然会迷路。
 
-2. **自然语言歧义消除**：用户说"帮我检查这里的配置文件"，"这里"到底指哪里？如果 Prompt 里明确写了 `当前工作目录是：C:\Users\25853\Desktop\self-harness\code\miniMaster2.0`，Agent 就不会误解。
+2. **自然语言歧义消除**：用户说"帮我检查这里的配置文件"，"这里"到底指哪里？如果 Prompt 里明确写了 `当前工作目录是：C:\Users\25853\Desktop\self-harness\code\VeriForge2.0`，Agent 就不会误解。
 
 3. **工具调用的准确性**：本项目的工具系统在 `tools/core.py` 和 `tools/` 各子模块中实现，它们在解析相对路径时默认使用 workspace 作为基准。Agent 知道当前目录后，才能正确构造工具调用参数。
 
@@ -93,7 +93,7 @@ bash 工具当前通过 PowerShell 执行命令。
 
 ## 五、三层 Agent 的各自职责
 
-miniMaster2.0 采用**三层 Agent 协作架构**，每一层有明确的职责分工，定义在 `prompting/builders.py`（提示词构造）和 `prompting/policies.py`（动作策略）中。
+VeriForge2.0 采用**三层 Agent 协作架构**，每一层有明确的职责分工，定义在 `prompting/builders.py`（提示词构造）和 `prompting/policies.py`（动作策略）中。
 
 ### 1. Plan-Agent（计划 Agent）
 
@@ -170,4 +170,4 @@ miniMaster2.0 采用**三层 Agent 协作架构**，每一层有明确的职责�
 | Generator-Agent | 执行工程师——选择工具，动手干活 |
 | Validate-Agent | 质检员——检查执行结果是否合格 |
 
-本报告基于对 miniMaster2.0 项目中 `prompting/builders.py`、`prompting/policies.py`、`app/bootstrap.py`、`tools/`、`utils/` 等关键代码文件的阅读和搜索结果整理而成。
+本报告基于对 VeriForge2.0 项目中 `prompting/builders.py`、`prompting/policies.py`、`app/bootstrap.py`、`tools/`、`utils/` 等关键代码文件的阅读和搜索结果整理而成。

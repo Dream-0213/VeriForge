@@ -1,6 +1,6 @@
 """任务执行与重试主循环。
 
-这一层是 miniMaster 的第二层循环，负责围绕单个任务驱动 Executor-Agent：
+这一层是 VeriForge 的第二层循环，负责围绕单个任务驱动 Executor-Agent：
 - 让 Executor 逐步取证
 - 在适当时机提交任务结论
 - 调用 Validator 做独立复核

@@ -1,4 +1,4 @@
-D:\python3.10\python.exe C:\Users\25853\Desktop\self-harness\code\miniMaster2.0\main_agent.py
+D:\python3.10\python.exe C:\Users\25853\Desktop\self-harness\code\VeriForge2.0\main_agent.py
 请输入你的任务/查询: 请先判断当前项目里的 memory 目录是否真的有用，第一轮只允许读取 bootstrap/runtime.py、memory/prompt_context.py 这两个文件并基于它们给出初步判断，若发现证据不足或验证器指出结论不成立，再继续补充读取 memory/session.py、memory/working_memory.py、engine/validator.py 中最少必要的文件，不要重复读取同一个文件，若上一轮失败需结合上一轮反馈和已有证据继续而非从头扫描整个项目，最终结论需分别说明 planner_memory、generator_memory、validation_memory、retry_archive_by_task 的作用，明确回答这套 memory 是单次运行内有效还是跨重启持久化有效，并列出本次实际读取过的文件路径，不写未读到的实现细节。
 
 
@@ -21,20 +21,20 @@ D:\python3.10\python.exe C:\Users\25853\Desktop\self-harness\code\miniMaster2.0\
 🧠 请求 Planner-Agent（model=qwen3.5-122b-a10b, timeout=120s）
 🧠 Planner-Agent 已返回响应
 📋 Planner-Agent 选择工具: read
-📋 参数: {'file_path': 'C:\\Users\\25853\\Desktop\\self-harness\\code\\miniMaster2.0\\bootstrap\\runtime.py'}
+📋 参数: {'file_path': 'C:\\Users\\25853\\Desktop\\self-harness\\code\\VeriForge2.0\\bootstrap\\runtime.py'}
   ⏱️ read 耗时: 0.00s
   ✅ 规划侦察结果: {'success': True, 'content': 'import os\\nimport time\\n\\nfrom dotenv import load_dotenv\\nfrom openai import OpenAI\\nfrom langsmith.wrappers import wrap_openai\\n\\nfrom domain.todo import ToDoList\\nfrom domain.types import AgentRuntime\\nfrom memory.working_memory import Wo...（已截断，省略 2903 个字符）', 'total_lines': 107, 'start_line': 1, 'end_line': 107, 'has_more': False, '...': '省略 1 个字段'}
 🧠 请求 Planner-Agent（model=qwen3.5-122b-a10b, timeout=120s）
 🧠 Planner-Agent 已返回响应
 📋 Planner-Agent 选择工具: read
-📋 参数: {'file_path': 'C:\\Users\\25853\\Desktop\\self-harness\\code\\miniMaster2.0\\memory\\prompt_context.py'}
+📋 参数: {'file_path': 'C:\\Users\\25853\\Desktop\\self-harness\\code\\VeriForge2.0\\memory\\prompt_context.py'}
   ⏱️ read 耗时: 0.00s
   ✅ 规划侦察结果: {'success': True, 'content': 'from __future__ import annotations\\n\\nfrom domain.task_requirements import render_completion_checklist\\nfrom domain.types import AgentRuntime, Task\\nfrom memory.session import SessionMemoryManager\\nfrom skills.store import render_skills_for...（已截断，省略 4221 个字符）', 'total_lines': 115, 'start_line': 1, 'end_line': 115, 'has_more': False, '...': '省略 1 个字段'}
 🧠 请求 Planner-Agent（model=qwen3.5-122b-a10b, timeout=120s）
 🧠 Planner-Agent 已返回响应
 📋 Planner-Agent 选择工具: read
-📋 参数: {'file_path': 'C:\\Users\\25853\\Desktop\\self-harness\\code\\miniMaster2.0\\bootstrap\\runtime.py'}
-  ⚠️  Planner-Agent 重复发出了相同动作：tool=read, parameters={"file_path": "C:\\Users\\25853\\Desktop\\self-harness\\code\\miniMaster2.0\\bootstrap\\runtime.py"}。请不要重复同一条侦察；先基于现有 observation 判断是否应 add_task / split_task / retry_task / subagent_tool，或改用新的侦察动作来补当前缺口。
+📋 参数: {'file_path': 'C:\\Users\\25853\\Desktop\\self-harness\\code\\VeriForge2.0\\bootstrap\\runtime.py'}
+  ⚠️  Planner-Agent 重复发出了相同动作：tool=read, parameters={"file_path": "C:\\Users\\25853\\Desktop\\self-harness\\code\\VeriForge2.0\\bootstrap\\runtime.py"}。请不要重复同一条侦察；先基于现有 observation 判断是否应 add_task / split_task / retry_task / subagent_tool，或改用新的侦察动作来补当前缺口。
 🧠 请求 Planner-Agent（model=qwen3.5-122b-a10b, timeout=120s）
 🧠 Planner-Agent 已返回响应
 📋 Planner-Agent 选择工具: split_task
@@ -514,9 +514,9 @@ D:\python3.10\python.exe C:\Users\25853\Desktop\self-harness\code\miniMaster2.0\
   🧠 请求 Executor-Agent（model=qwen3.5-122b-a10b, timeout=120s）
   🧠 Executor-Agent 已返回响应
   🛠️ Executor-Agent 选择工具: bash
-  🛠️ 参数: {'command': 'cat "C:\\Users\\25853\\Desktop\\self-harness\\code\\miniMaster2.0\\engine\\validator.py" | Select-Object -First 50'}
-  📂 bash cwd: C:\Users\25853\Desktop\self-harness\code\miniMaster2.0
-  ▶️ bash command: cat "C:\Users\25853\Desktop\self-harness\code\miniMaster2.0\engine\validator.py" | Select-Object -First 50
+  🛠️ 参数: {'command': 'cat "C:\\Users\\25853\\Desktop\\self-harness\\code\\VeriForge2.0\\engine\\validator.py" | Select-Object -First 50'}
+  📂 bash cwd: C:\Users\25853\Desktop\self-harness\code\VeriForge2.0
+  ▶️ bash command: cat "C:\Users\25853\Desktop\self-harness\code\VeriForge2.0\engine\validator.py" | Select-Object -First 50
   ⏱️ bash 耗时: 0.20s
   ✅ 工具执行结果: {'success': True, 'stdout': 'from __future__ import annotations\\n\\nfrom domain.task_requirements import build_completion_checklist\\nfrom domain.types import AgentRuntime\\nfrom engine.guards import ConsecutiveActionGuard, build_repeated_action_feedback\\nfrom engine.supp...（已截断，省略 1471 个字符）', 'stderr': '', 'returncode': 0}
 

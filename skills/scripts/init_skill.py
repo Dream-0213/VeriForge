@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""初始化一个新的 miniMaster skill package。
+"""初始化一个新的 VeriForge skill package。
 
 这个脚本的用途是快速生成符合目录约定的 skill 骨架，避免手工创建时漏掉：
 - `SKILL.md`
@@ -125,12 +125,12 @@ def init_skill(skill_name: str, library_root: Path) -> Path:
 
 def parse_args() -> argparse.Namespace:
     """解析命令行参数。"""
-    parser = argparse.ArgumentParser(description="Initialize a new miniMaster skill package.")
+    parser = argparse.ArgumentParser(description="Initialize a new VeriForge skill package.")
     parser.add_argument("skill_name", help="Skill name in hyphen-case, for example: inspect-api")
     parser.add_argument(
         "--path",
         default=str(DEFAULT_LIBRARY_ROOT),
-        help="Target skills library directory. Defaults to miniMaster's bundled library.",
+        help="Target skills library directory. Defaults to VeriForge's bundled library.",
     )
     return parser.parse_args()
 
