@@ -79,6 +79,7 @@ class AgentRuntime:
     skill_store: Any  # 可查询的 skill 仓库。
     started_at_monotonic: float  # 本次运行开始时的 monotonic 时间戳。
     retry_archive_by_task: dict[str, list[str]]  # 每个任务的历史重试摘要。
+    user_style: str = "default"  # 用户输出风格偏好。
     max_plan_iterations: int = 8  # 顶层规划轮数上限。
     max_planner_research_steps: int = 3  # 单轮规划中允许的只读侦察步数。
     max_generator_steps: int = 20  # 单轮执行允许的最大步数。

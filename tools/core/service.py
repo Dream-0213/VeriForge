@@ -38,17 +38,16 @@ class ToolService:
         self.context = context
 
     @classmethod
-    def bootstrap(cls, workspace: Optional[str] = None) -> "ToolService":
-        """按固定内置工具集完成装配。"""
-        # 如果调用方没显式传 workspace，就以当前进程目录为准。
+    def bootstrap(cls, workspace: Optional[str] = None, exclude_tools: Optional[tuple[str, ...]] = None) -> "ToolService":
+        """按固定内置工具集完成装配，支持按用户配置排除工具。"""
         default_workspace = workspace or os.getcwd()
         context = ToolContext(
-            # 后续所有工具的相对路径都会以这里为基准。
             workspace=default_workspace,
-            # system_name 供 Prompt 和某些工具内部差异化分支使用。
             system_name=platform.system(),
         )
-        return cls(tool_classes=BUILTIN_TOOLS, context=context)
+        exclude = set(exclude_tools or ())
+        tool_classes = tuple(tc for tc in BUILTIN_TOOLS if tc.spec.name not in exclude)
+        return cls(tool_classes=tool_classes, context=context)
 
     def execute(self, name: str, params: Dict[str, Any]) -> Dict[str, Any]:
         """执行指定工具，并把常见失败统一收敛成结构化结果。"""

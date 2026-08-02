@@ -16,23 +16,103 @@ VeriForge 是我在 InfraCoder（单 Agent 工具链）基础上迭代的升级�
 | 失败处理 | 模型自行发现修正 | 验证失败 → 反馈回流 → 强制重试 |
 | 记忆管理 | 单份上下文压缩 | 分角色工作记忆 + 重试归档 |
 
+## 环境要求
+
+- Python 3.10+（推荐 3.11）
+- 一个可用的 OpenAI-Compatible API（DeepSeek / OpenAI / 本地 vLLM 均可）
+- 支持原生 function calling 的模型（如 deepseek-v4-flash、gpt-4o-mini）
+
 ## 快速开始
 
 ```bash
-# 1. 安装依赖
+# 1. 获取项目
+git clone <你的仓库地址> VeriForge
+cd VeriForge
+
+# 2. 创建虚拟环境并安装依赖
 python3.11 -m venv venv
 source venv/bin/activate
+pip install --upgrade pip
 pip install -r requirements.txt
 
-# 2. 配置模型（DeepSeek / OpenAI / 本地 vLLM 均可）
+# 3. 配置模型
 cp .env.example .env
-# API_KEY=your_api_key
-# BASE_URL=https://api.deepseek.com
-# MODEL_NAME=deepseek-v4-flash
+```
 
-# 3. 运行
+编辑 `.env`：
+
+```bash
+# openai 兼容的 API KEY
+API_KEY=你的key
+
+# API 地址
+BASE_URL=https://api.deepseek.com
+
+# 模型名（必须支持 function calling）
+MODEL_NAME=deepseek-v4-flash
+
+# 单次模型请求超时（秒）
+LLM_TIMEOUT_SECONDS=120
+
+# 最大 Token 数
+MAX_TOKENS=8192
+
+# LangSmith 追踪（可选，默认关闭）
+LANGCHAIN_TRACING_V2=false
+```
+
+如果使用本地 vLLM，改成：
+
+```bash
+BASE_URL=http://127.0.0.1:8000/v1
+MODEL_NAME=你的模型名
+API_KEY=EMPTY
+```
+
+## 命令行运行
+
+```bash
 python3 main_agent.py
 ```
+
+程序会提示输入任务：
+
+```
+请输入你的任务/查询:
+```
+
+输入一个任务，比如：
+
+```
+读取 tools/core/service.py 并总结它做了什么
+```
+
+运行流程：
+
+- **Planner-Agent** 先规划任务
+- **Executor-Agent** 执行并提交结论
+- **Validator-Agent** 独立验证，通过后任务标记 DONE
+- 完整日志实时打印，最终结论在输出末尾
+
+## Web UI
+
+基于 Gradio 提供可视化界面，实时展示三层智能体的运行过程。
+
+```bash
+# 安装 Web UI 依赖（首次）
+pip install gradio
+
+# 启动
+python3 webui.py
+```
+
+浏览器访问 `http://127.0.0.1:7861`。
+
+界面包含三个面板：
+
+- **当前状态**：实时显示当前阶段（Planner / Executor / Validator）、当前步骤、最近动作
+- **运行日志**：实时逐行追加每次模型调用、工具调用和验证结果
+- **任务面板**：任务结束后展示 DONE / FAILED / BLOCKED 状态与结论
 
 ## 架构
 
@@ -106,11 +186,38 @@ python3 main_agent.py
 - `tool_choice="required"` 不被支持时自动降级为 `auto`
 - 模型一次返回多个 function call 时逐个解码、执行，不丢动作
 
+## 常见问题
+
+### Q: 报错 `Thinking mode does not support this tool_choice`
+
+项目已内置兼容处理：检测到该错误会自动把 `tool_choice` 从 `required` 降级为 `auto` 重试，无需手动处理。
+
+### Q: 报错 `Insufficient Balance` / 401 / 404
+
+检查 `.env` 里的 API_KEY、BASE_URL、MODEL_NAME 是否正确，模型名必须支持 function calling。
+
+### Q: 任务 600 秒还没跑完
+
+在 `domain/types.py` 的 `AgentRuntime` 中调整预算：
+
+```python
+max_plan_iterations: int = 8      # Planner 最大轮数
+max_generator_steps: int = 20     # Executor 单任务最大步数
+max_validate_steps: int = 8       # Validator 最大步数
+max_task_retries: int = 3         # 任务最大重试次数
+max_total_runtime_seconds: int = 600  # 总运行预算
+```
+
+### Q: 模型一次返回多个 function call
+
+项目已支持多动作解码：一次返回多个 read/bash 时会逐个执行并写入工作记忆，不会丢弃。
+
 ## 项目结构
 
 ```
 VeriForge/
-├── main_agent.py          # 程序入口
+├── main_agent.py          # 命令行入口
+├── webui.py               # Gradio Web 界面（实时状态 + 日志 + 任务面板）
 ├── bootstrap/             # 运行时装配（client / 工具 / 记忆 / 任务）
 ├── engine/                # 三层编排：main_loop / runner / validator
 ├── llm/

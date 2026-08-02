@@ -26,6 +26,7 @@ from domain.types import AgentRuntime
 from memory.working_memory import WorkingMemory
 from skills.store import SkillStore
 from tools.core.service import ToolService
+from user_config import load_user_config
 
 
 def _read_env_int(env_key: str, default: int) -> int:
@@ -117,6 +118,7 @@ def build_runtime(
     llm_timeout_seconds: int,
     client,
     tool_service: ToolService,
+    user_style: str = "default",
 ) -> AgentRuntime:
     """构造运行期状态容器。
 
@@ -128,7 +130,6 @@ def build_runtime(
     这样不同角色不会共享一锅混杂上下文，而是各自维护面向本阶段的记忆视图。
     """
     return AgentRuntime(
-        # 用户当前这次输入的问题，是整个运行的起点。
         user_query=user_query,
         # 模型名称会用于日志展示和真实调用。
         model_name=model_name,
@@ -138,6 +139,7 @@ def build_runtime(
         client=client,
         # 统一的工具注册与执行入口。
         tool_service=tool_service,
+        user_style=user_style,
         # Planner 后续会把任务草案写进这里。
         todo_list=ToDoList(),
         # Planner 记忆保留得稍多一点，因为它要靠少量侦察反复修订任务结构。
@@ -155,21 +157,48 @@ def build_runtime(
     )
 
 
-def bootstrap_runtime() -> AgentRuntime:
-    """完成入口阶段的环境初始化并返回 runtime。"""
-    # `.env` 只是配置来源之一；真正参与后续运行的是已经读入内存的 runtime。
+def build_runtime_for_query(user_query: str) -> AgentRuntime:
+    """供 Web UI 等调用方注入用户查询并构建 runtime。
+
+    会加载用户个性化配置：模型偏好、禁用工具、输出风格。
+    """
     load_dotenv()
-    # 先拿到模型 client 和模型配置。
+    user_config = load_user_config()
+
     client, model_name, llm_timeout_seconds = create_client_from_env()
-    # 再读取本次用户输入。
-    user_query = read_user_query()
-    # 然后装配工具系统。
-    tool_service = create_tool_service()
-    # 最后把上面这些对象打包成统一 runtime。
+    if user_config.preferred_model:
+        model_name = user_config.preferred_model
+
+    tool_service = create_tool_service(
+        exclude_tools=tuple(user_config.disabled_tools),
+    )
     return build_runtime(
         user_query=user_query,
         model_name=model_name,
         llm_timeout_seconds=llm_timeout_seconds,
         client=client,
         tool_service=tool_service,
+        user_style=user_config.output_style,
+    )
+
+
+def bootstrap_runtime() -> AgentRuntime:
+    """完成入口阶段的环境初始化并返回 runtime。"""
+    load_dotenv()
+    user_config = load_user_config()
+
+    client, model_name, llm_timeout_seconds = create_client_from_env()
+    if user_config.preferred_model:
+        model_name = user_config.preferred_model
+
+    user_query = read_user_query()
+    return build_runtime(
+        user_query=user_query,
+        model_name=model_name,
+        llm_timeout_seconds=llm_timeout_seconds,
+        client=client,
+        tool_service=create_tool_service(
+            exclude_tools=tuple(user_config.disabled_tools),
+        ),
+        user_style=user_config.output_style,
     )

@@ -57,12 +57,22 @@ def _build_stage_role(
     }
 
 
-def build_stage_context(tool_service: ToolService) -> dict:
+def build_stage_context(tool_service: ToolService, user_style: str = "default") -> dict:
     """构造流程编排阶段需要的静态上下文。
 
     其中 planner 会额外拆出一组 `control_*` 动作集合，用来实现“侦察预算耗尽后，
     只能返回控制动作、不能再继续 read/glob/grep”的约束。
     """
+    # 用户输出风格以 system prompt 附加指令的方式生效。
+    system_prompt = build_execution_context_block(**tool_service.get_prompt_execution_context())
+    if user_style and user_style != "default":
+        if user_style == "concise":
+            system_prompt += "\n\n# Style\nBe concise. Use short sentences, minimal explanation."
+        elif user_style == "detailed":
+            system_prompt += "\n\n# Style\nBe thorough. Include full explanations and context."
+        elif user_style == "bullet":
+            system_prompt += "\n\n# Style\nUse bullet points and structured formatting."
+
     planner_role = _build_stage_role(
         stage_name="planner",
         actions=PLAN_ACTIONS,
@@ -83,8 +93,7 @@ def build_stage_context(tool_service: ToolService) -> dict:
     )
 
     return {
-        # system_prompt 只放跨阶段共享的硬环境信息；具体任务上下文放在 user prompt。
-        "system_prompt": build_execution_context_block(**tool_service.get_prompt_execution_context()),
+        "system_prompt": system_prompt,
         # 基础工具说明会进入 Executor / Validator Prompt。
         "base_tools": tool_service.render_prompt(category="base"),
         # 搜索工具说明同理。

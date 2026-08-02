@@ -183,7 +183,7 @@ def run_main_loop(runtime: AgentRuntime, max_iter: int = 30):
     - 在预算耗尽时把未完成任务统一标成 BLOCKED。
     """
     # 先把三阶段共享的静态上下文一次性构造好。
-    stage_context = build_stage_context(runtime.tool_service)
+    stage_context = build_stage_context(runtime.tool_service, user_style=getattr(runtime, "user_style", "default"))
     # 最终规划轮数取调用方传入值和 runtime 默认预算的较小者。
     plan_iterations = min(max_iter, runtime.max_plan_iterations)
     # session_memory 会在任务重试时保存跨轮摘要。
